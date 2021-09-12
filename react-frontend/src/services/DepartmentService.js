@@ -3,27 +3,25 @@ import axios from 'axios';
 const DEPARTMENT_API_BASE_URL = "http://localhost:9191/departments";
 
 class DepartmentService {
+    headers = {
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+      }
 
     getDepartments(){
         return axios.get(DEPARTMENT_API_BASE_URL + '/');
     }
 
     createDepartment(department){
-        const headers = {
-            // 'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "http://localhost:3000",
-          }
-
-        return axios.post(DEPARTMENT_API_BASE_URL + '/create', department,{headers: headers}
-          );
+ 
+        return axios.post(DEPARTMENT_API_BASE_URL + '/create', department,{headers: this.headers});
     }
 
     getDepartmentById(departmentId){
         return axios.get(DEPARTMENT_API_BASE_URL + '/' + departmentId);
     }
 
-    updateDepartment(department, departmentId){
-        return axios.put(DEPARTMENT_API_BASE_URL + '/' + departmentId, department);
+    updateDepartment(department){
+        return axios.put(DEPARTMENT_API_BASE_URL + '/update', department,{headers: this.headers});
     }
 
     deleteDepartment(departmentId){

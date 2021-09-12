@@ -6,21 +6,18 @@ class CreateDepartmentComponent extends Component {
         super(props)
 
         this.state = {
-            // step 2
             id: this.props.match.params.id,
             depName: '',
             isActive: true,
 
         }
         this.changeDepNameHandler = this.changeDepNameHandler.bind(this);
-        this.changeActiveHandler = this.changeActiveHandler.bind(this);
         this.saveOrUpdateDepartment = this.saveOrUpdateDepartment.bind(this);
+        this.toggleChange = this.toggleChange.bind(this);
     }
 
-    // step 3
     componentDidMount() {
 
-        // step 4
         if (this.state.id === '_add') {
             this.setState({
                 isActive: true,
@@ -29,35 +26,32 @@ class CreateDepartmentComponent extends Component {
         } else {
             DepartmentService.getDepartmentById(this.state.id).then((res) => {
                 let department = res.data;
-                console.log("***",department);
                 this.setState({
+                    id: this.state.id,
                     depName: department.depName,
                     isActive: department.active,
                 });
+                this.state.isActive = department.active;
             });
         }
     }
 
     saveOrUpdateDepartment = (e) => {
         e.preventDefault();
-        let department = { depName: this.state.depName, active: this.state.isActive };
-        console.log('department => ' + JSON.stringify(department));
-
-        // step 5
         if (this.state.id === '_add') {
+            let department = { depName: this.state.depName, active: this.state.isActive };
             DepartmentService.createDepartment(department)
-                // .then(res =>{
-                //     this.props.history.push('/deparment');
-                // }
                 .then((res) => {
                     console.log("RESPONSE RECEIVED: ", res);
-                    this.props.history.push('/deparments');
+                    this.props.history.push('/departments');
                 })
                 .catch((err) => {
                     console.log("AXIOS ERROR: ", err);
                 })
         } else {
-            DepartmentService.updateDepartment(department, this.state.id).then(res => {
+            let department = {id: this.state.id, depName: this.state.depName, active: this.state.isActive };
+           
+            DepartmentService.updateDepartment(department).then(res => {
                 this.props.history.push('/departments');
             });
         }
@@ -84,9 +78,8 @@ class CreateDepartmentComponent extends Component {
     }
 
     toggleChange = () => {
-        this.setState({
-          isActive: !this.state.isActive,
-        });
+        this.state.isActive = !this.state.isActive;
+        console.log('active  => ' + JSON.stringify( this.state.isActive));
       }
       
     render() {

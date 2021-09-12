@@ -13,7 +13,6 @@ class CreateEmployeeComponent extends Component {
         this.state = {
             
             departments: [],
-            // step 2
             id: this.props.match.params.id,
             ecode: '',
             name: '',
@@ -32,19 +31,16 @@ class CreateEmployeeComponent extends Component {
         this.changeDeptIdHandler = this.changeDeptIdHandler.bind(this);
     }
 
-    // step 3
     componentDidMount() {
         DepartmentService.getDepartments().then((res) => {
             this.setState({ departments: res.data });
         });
-        // step 4
 
         if (this.state.id === '_add') {
             return
         } else {
             EmployeeService.getEmployeeById(this.state.id).then((res) => {
                 let employee = res.data.employee;
-                console.log("***", employee);
                 this.setState({
                     ecode: employee.ecode,
                     name: employee.name,
@@ -59,15 +55,10 @@ class CreateEmployeeComponent extends Component {
     }
     saveOrUpdateEmployee = (e) => {
         e.preventDefault();
-        let employee = { ecode: this.state.ecode, name: this.state.name, dob: this.state.dob, gender: this.state.gender, mobile: this.state.mobile, deptId: this.state.selectedDepartment };
-        console.log('employee => ' + JSON.stringify(employee));
-
-        // step 5
         if (this.state.id === '_add') {
+            let employee = { ecode: this.state.ecode, name: this.state.name, dob: this.state.dob, gender: this.state.gender, mobile: this.state.mobile, deptId: this.state.selectedDepartment };
+            console.log('employee => ' + JSON.stringify(employee));
             EmployeeService.createEmployee(employee)
-                // .then(res =>{
-                //     this.props.history.push('/employees');
-                // }
                 .then((res) => {
                     console.log("RESPONSE RECEIVED: ", res);
                     this.props.history.push('/employees');
@@ -76,7 +67,9 @@ class CreateEmployeeComponent extends Component {
                     console.log("AXIOS ERROR: ", err);
                 })
         } else {
-            EmployeeService.updateEmployee(employee, this.state.id).then(res => {
+            let employee = {id: this.state.id, ecode: this.state.ecode, name: this.state.name, dob: this.state.dob, gender: this.state.gender, mobile: this.state.mobile, deptId: this.state.selectedDepartment };
+            console.log('employee => ' + JSON.stringify(employee));
+            EmployeeService.updateEmployee(employee).then(res => {
                 this.props.history.push('/employees');
             });
         }
@@ -91,7 +84,6 @@ class CreateEmployeeComponent extends Component {
     }
 
     changeDobHandler = (event) => {
-        console.log("9999",event);
         this.setState({ dob: event});
     }
 
@@ -195,23 +187,16 @@ class CreateEmployeeComponent extends Component {
                                         <input placeholder="Employee Mobile" name="mobile" className="form-control"
                                             value={this.state.mobile} onChange={this.changeMobileHandler} />
                                     </div>
-                                    {/* <div className="form-group">
-                                        <label> Department ID: </label>
-                                        <input placeholder="Department Id" name="deptId" className="form-control"
-                                            value={this.state.deptId} onChange={this.changeDeptIdHandler} />
-                                    </div> */}
                                     <div className="form-group">
                                         <label>Department</label>
                                         <select className="form-control"
                                             value={this.state.selectedDepartment}
                                             onChange={this.handleChange}>
                                             <option>Select Department</option>
-                                            {this.state.departments.map((department) =>
-
-                                                <option key={department.id} value={department.id} >{department.depName}</option>)}
+                                            {this.state.departments.filter(e => e.active == true).map((department) =>
+                                                <option value={department.id} >{department.depName}</option>)}
                                         </select>
                                     </div>
-
                                     <button className="btn btn-success" onClick={this.saveOrUpdateEmployee}>Save</button>
                                     <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{ marginLeft: "10px" }}>Cancel</button>
                                 </form>

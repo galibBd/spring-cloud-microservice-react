@@ -17,7 +17,7 @@ import com.jeeacademy.employee.dto.ResponseTemplateDto;
 import com.jeeacademy.employee.entity.Employee;
 import com.jeeacademy.employee.service.EmployeeService;
 
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -26,21 +26,18 @@ public class EmployeeController {
 	EmployeeService employeeService;
 	
 	@PostMapping("/create")
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	public ResponseTemplateDto saveEmplyee(@RequestBody Employee employee) {
 		return employeeService.saveEmployee(employee);
 	}
 	
 	
 	@PutMapping("/update")
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	public Employee updateDpartment(@RequestBody Employee employee) {
 		return employeeService.updateEmployee(employee);
 		
 	}
 	
 	@GetMapping("/")
-	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	public List<Employee> findEmployees() {
 		return employeeService.findEmployees();
 	}

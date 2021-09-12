@@ -76,14 +76,12 @@ class ListEmployeeComponent extends Component {
                                         <tr key = {employee.id}>
                                              <td> { employee.ecode} </td>   
                                              <td> {employee.name}</td>
-                                             {/* <td> <Moment> {employee.dob}</Moment></td> */}
                                              <td><Moment format="DD-MMM-YYYY" date={employee.dob} /></td>
                                              <td> {employee.gender}</td>
                                              <td> {employee.mobile}</td>
                                              <td>
                                                  <button onClick={ () => this.editEmployee(employee.id)} className="btn btn-info">Update </button>
                                                  <button style={{marginLeft: "10px"}} onClick={ () => this.deleteEmployee(employee.id)} className="btn btn-danger">Delete </button>
-                                                 {/* <button style={{marginLeft: "10px"}} onClick={ () => this.viewEmployee(employee.id)} className="btn btn-info">View </button> */}
                                              </td>
                                         </tr>
                                     )

@@ -18,6 +18,7 @@ class ListDepartmentComponent extends Component {
         DepartmentService.deleteDepartment(id).then( res => {
             this.setState({department: this.state.departments.filter(department => department.id !== id)});
         });
+        this.props.history.push('/departments');
     }
     // viewDepartment(id){
     //     this.props.history.push(`/view-employee/${id}`);
